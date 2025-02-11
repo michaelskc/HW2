@@ -1,6 +1,6 @@
 
 /*
- * *** PLACE YOUR NAME / SECTION HERE ***
+ * *** Michael Simmons / COMP272-400C ***
  *
  * Homework # 2 (Programming Assignment). This Java class defines a few basic
  * manipulation operations of a binary trees.
@@ -93,6 +93,7 @@ public class BinaryTree {
 
     public void replaceValue(int oldVal, int newVal) {
         replaceValueHelper(root, oldVal, newVal);
+
     }
 
     public int findMin() {
@@ -221,10 +222,19 @@ public class BinaryTree {
      */
 
     private void replaceValueHelper(Node node, int oldVal, int newVal) {
+        // Return once the end of a tree is reached, or if the tree isn't valid
+        if (node == null) {
+            return;
+        }
 
-        // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
-        // BINARY TREE (WHICH IS BASED ON RECURSION)
+        // Replace the value
+        if (node.data == oldVal) {
+            node.data = newVal;
+        }
 
+        // Recursively calls this function for all nodes in a tree
+        replaceValueHelper(node.left, oldVal, newVal);
+        replaceValueHelper(node.right, oldVal, newVal);
     }
 
 
@@ -243,11 +253,19 @@ public class BinaryTree {
      */
 
     private int findMinHelper(Node node) {
+        // Return max integer value if the tree is empty
+        if (node == null) {
+            return Integer.MAX_VALUE;
+        }
 
-        // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
-        // BINARY TREE (WHICH IS BASED ON RECURSION)
+        // Compare the left and right sides of each tree to compare the minimum value
+        // Each time the function is called, it will compare the left, right, and current node value
+        int leftMin = findMinHelper(node.left);
+        int rightMin = findMinHelper(node.right);
 
-        return Integer.MAX_VALUE;
+        // Compare the minimum of the left, and right, then compare to the current node value
+        // Return lowest value
+        return (Math.min(Math.min(leftMin, rightMin), node.data));
     }
 
 
@@ -265,14 +283,24 @@ public class BinaryTree {
      */
 
     private int nodesGTHelper(Node node, int val) {
+        // Return 0 if the tree is empty
+        if (node == null) {
+            return 0;
+        }
 
-        // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
-        // BINARY TREE (WHICH IS BASED ON RECURSION)
+        // Initialize an int (count)
+        // If the node is greater than, then it should be counted, so set count to 1. Otherwise, set to 0
+        int count = 0;
+        if (node.data > val) {
+            count = 1;
+        }
 
-        // return -1; // RECALL, IF TREE IS EMPTY, RETURN -1
+        // Recursively call the function for all nodes
+        count += nodesGTHelper(node.left, val);
+        count += nodesGTHelper(node.right, val);
 
-
-        return -1;
+        // Return the final result
+        return count;
     }
 
 
@@ -303,14 +331,22 @@ public class BinaryTree {
     }
 
     private int[] averageHelper(Node n) {
+        // Return 0 if the tree is empty
+        if (n == null) {
+            return new int[]{0, 0};
+        }
 
-        // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
-        // BINARY TREE (WHICH IS BASED ON RECURSION)
+        // Create an array for the left and right sides of the tree
+        // Calls recursively for all nodes in the tree
+        int[] left = averageHelper(n.left);
+        int[] right = averageHelper(n.right);
 
-        // RECALL, IF THE TREE IS EMPTY, RETURN 0 FOR BOTH THE SUM AND
-        // COUNT LOCATIONS IN THE RETURNED ARRAY AS SHOWN BELOW, ELSE
-        // THE 'SUM' IS RETURNED IN INDEX LOCATION 0, AND COUNT IS LOCATION 1
+        // Initialize sum of nodes (values) and count of nodes (number of nodes, not value)
+        int sumOfNodes = n.data + (left[0] + right[0]);
+        int countOfNodes = 1 + (left[1] + right[1]);
 
-        return new int[]{0, 0};
+        // Return the sum and count of nodes
+        // From directions: THE 'SUM' IS RETURNED IN INDEX LOCATION 0, AND COUNT IS LOCATION 1
+        return new int[]{sumOfNodes, countOfNodes};
     }
 }
